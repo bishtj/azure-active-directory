@@ -28,7 +28,7 @@ resource "azurerm_resource_group" "user_resource_group" {
 }
 
 resource "azurerm_resource_group" "dept_resource_group" {
-  name = "dept_resource_group"
+  name = "${var.dept_name}-rg"
   location = var.resource_location
   tags = {
     owner = var.dept_name
