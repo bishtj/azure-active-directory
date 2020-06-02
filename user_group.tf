@@ -1,32 +1,31 @@
 
-resource "azuread_user" "user" {
-  display_name = "jbisht1"
-  password = "Komplecs_1234"
-  user_principal_name = "jbisht1@jaikritbishthotmail.onmicrosoft.com"
+data "azuread_user" "users" {
+  for_each = toset(var.user_emails)
+  user_principal_name = each.value
 }
 
 resource "azuread_group" "ad_user_group" {
-  name = "devteam"
-  members = ["${azuread_user.user.object_id}"]
+  name = var.dept_name
+  members = values(data.azuread_user.users).*.object_id
 }
 
 resource "azurerm_resource_group" "user_resource_group" {
-  location = "eastus"
-  name = "jbisht1_resource_group"
+  for_each = data.azuread_user.users
+  name = "${each.value["display_name"]}-rg"
+  location = var.resource_location
+
   tags = {
-    owner = "jbisht1"
-    owner_email = "bisht1@jaikritbishthotmail.onmicrosoft.com"
+    owner_email = each.value["user_principal_name"]
+    owner = each.value["display_name"]
   }
 }
 
-resource "azurerm_resource_group" "dev_team_resource_group" {
-  location = "eastus"
-  name = "dev_team_resource_group"
-
+resource "azurerm_resource_group" "dept_resource_group" {
+  name = "dept_resource_group"
+  location = var.resource_location
   tags = {
-    owner = "devteam"
+    owner = var.dept_name
   }
-
 }
 
 
