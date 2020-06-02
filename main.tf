@@ -7,8 +7,9 @@ provider "azuread" {
   version = "0.9.0"
 }
 
-data "azurerm_subscription" "main_subscription" {}
-
+provider "random" {
+  version = "2.2.1"
+}
 
 
 
