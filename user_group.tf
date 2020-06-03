@@ -1,5 +1,3 @@
-
-
 resource "azuread_group" "ad_user_group" {
   name = var.dept_name
   members = values(data.azuread_user.users).*.object_id
