@@ -1,7 +1,3 @@
-data "azuread_user" "owners" {
-  for_each = toset(var.subscription_email)
-  user_principal_name = each.value
-}
 
 resource "azurerm_role_assignment" "assign_role_by_user" {
   for_each = data.azuread_user.users
